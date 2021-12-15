@@ -1,8 +1,8 @@
 import pygame  # a biblioteca do pygame
-# import random  # para pegar valores aleatórios
+import random  # para pegar valores aleatórios
 
 # Os imports de pastas agora:
-from Classes import *
+from projetoIP.Classes import *
 
 def dados_game(moeda_capturada, pontuacao, TELA_APP):
     # Essa função serve para colocar os dados de coleta de moeda
@@ -17,12 +17,12 @@ def dados_game(moeda_capturada, pontuacao, TELA_APP):
     TELA_APP.blit(formatted_text_coin, (840, 5))
     TELA_APP.blit(formatted_text_enemy, (420, 5))
 
-
-# def colisao(x_a, y_a, tam_a, x_b, y_b, tam_b): # Checa se a e b colidem
-#     if (x_a <=  x_b + tam_b[0] and x_b <= x_a + tam_a[0]) and (y_a <=  y_b + tam_b[1] and y_b <= y_a + tam_a[1]):
-#         return True
-#     else:
-#         return False
+#função de colisão com qualquer class
+def colisao(x_a, y_a, tam_a, x_b, y_b, tam_b): # Checa se a e b colidem
+    if (x_a <=  x_b + tam_b[0] and x_b <= x_a + tam_a[0]) and (y_a <=  y_b + tam_b[1] and y_b <= y_a + tam_a[1]):
+        return True
+    else:
+        return False
 
 FPS = 60
 
@@ -69,12 +69,12 @@ TAM_VIDA = VIDA.get_rect().size
 pygame.init()
 pygame.display.set_caption('Joguin')
 
-pygame.mixer.init()
-musica_fundo = pygame.mixer.music.load('Sons\BoxCat Games - Mission.mp3')  # Buscando a música de fundo
-sound_effect_collect = pygame.mixer.Sound('Sons\smw_message_block.wav') # Coleta moeda
-sound_effect_lazer = pygame.mixer.Sound('Sons\Shofixti-Shot.wav') # atira com laser
-sound_effect_health = pygame.mixer.Sound('Sons\smw_kick.wav') #  pega vida
-pygame.mixer.music.play(-1) # Se passar menos -1 para a função, ela fica em Loop
+# pygame.mixer.init()
+# musica_fundo = pygame.mixer.music.load('Sons\BoxCat Games - Mission.mp3')  # Buscando a música de fundo
+# sound_effect_collect = pygame.mixer.Sound('Sons\smw_message_block.wav') # Coleta moeda
+# sound_effect_lazer = pygame.mixer.Sound('Sons\Shofixti-Shot.wav') # atira com laser
+# sound_effect_health = pygame.mixer.Sound('Sons\smw_kick.wav') #  pega vida
+# pygame.mixer.music.play(-1) # Se passar menos -1 para a função, ela fica em Loop
 
 pygame.font.init()  # Iniciando
 fonte = pygame.font.SysFont('8-BIT WONDER.TTF', 35, True, True) # A fonte que aparece na tela ainda não é essa
@@ -95,9 +95,17 @@ while rodar_app:
     if tela_aplicativo == 'jogo':
         if tempo_jogo == 0:
             player = Nave(USUARIO, TELA_APP, ATAQUE)
-
+            vida = Vida(VIDA, TELA_APP)
         # Enquanto estiver no jogo, o tempo de jogo será contado (o tempo atual é (tempo_jogo - 1)/60 segundos)
         tempo_jogo += 1
+
+        #surgir a vida
+        vida.surgir(tempo_jogo, FPS, player)
+        vida.sumir(tempo_jogo, FPS)
+        
+        if vida.aparecer == True and colisao(player.x, player.y, player.tamanho, vida.x, vida.y, vida.tamanho):
+            player.vida += 1
+            vida.aparecer = False        
 
         # for event in pygame.event.get():
         #     if event.type == pygame.KEYDOWN:  
@@ -123,8 +131,9 @@ while rodar_app:
         # Mostra os dados de Coleta Moeda e Abates na tela
         dados_game(player.moedas, player.inimigos, TELA_APP)
 
+        vida.desenhar()
         player.desenhar()
-
+        
         # Aqui atualiza a tela inserindo todos os desenhos realizados pelo blit a cada rodar_app do while
         pygame.display.flip()
 
