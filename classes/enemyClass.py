@@ -5,6 +5,7 @@ import random
 class Enemy:
 
     def __init__(self, image, TELA, NAVE):
+
         self.image = image
         self.tamanho = self.image.get_rect().size
         self.TELA = TELA
@@ -12,7 +13,13 @@ class Enemy:
         self.rect = self.image.get_rect(
             center=(
                 random.randint(self.tela[0] + 20, self.tela[0] + 100),
-                random.randint(0, self.tela[1])
+                random.randint(0, self.tela[1] - self.tamanho[1] // 2)
             )
         )
         self.speed = random.randint(3, 10)
+
+    def update(self):
+        self.rect.move_ip(-5, 0)
+        if self.rect.right < 0:
+            self.aparecer = False
+
