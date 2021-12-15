@@ -130,7 +130,7 @@ class Vida:
             self.aparecer = False          
 
     def surgir(self, tempo_decorrido, FPS, nave):
-        if (tempo_decorrido % (10*FPS)) == 0 and (random.randint(1,100) <= 60):
+        if (tempo_decorrido % (10*FPS)) == 0 and (random.randint(1,100) <= 30):
             self.aparecer = True
             self.criar_posicao(nave)
  
