@@ -1,8 +1,4 @@
 import pygame
-
-# (self, imagem, TELA, NAVE)
-#
-
 # declara a classe nave que é contralada pelo jogador através das setas e atira pelo "espaço"
 # armazena sua posição e seu tamanho além do número de moedas, de corações, inimigos mortos e o tamanho da tela
 class Nave:
@@ -81,12 +77,3 @@ class Nave:
             self.TELA.blit(self.tiroIMG, (self.tiroX, self.tiroY))
 
         self.TELA.blit(self.imagem, (self.x, self.y))
-
-
-
-
-
-
-
-
-
