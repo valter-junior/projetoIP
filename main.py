@@ -2,7 +2,7 @@ import pygame  # a biblioteca do pygame
 import random  # para pegar valores aleatórios
 
 # Os imports de pastas agora:
-from classes.enemy import *
+from classes.enemyClass import *
 from classes.moeda import *
 from classes.vida import *
 from classes.nave import *
@@ -100,7 +100,7 @@ while rodar_app:
             player = Nave(USUARIO, TELA_APP, ATAQUE)
             vida = Vida(VIDA, TELA_APP)
             moeda = Moeda(MOEDA, TELA_APP)
-            enemy = Enemy(INIMIGO1, TELA_APP, player)
+            enemy = Enemy(INIMIGO1, TELA_APP)
         # Enquanto estiver no jogo, o tempo de jogo será contado (o tempo atual é (tempo_jogo - 1)/60 segundos)
         tempo_jogo += 1
 
@@ -154,7 +154,7 @@ while rodar_app:
         enemy.update()
 
         if enemy.aparecer == False:
-            enemy = Enemy(INIMIGO1, TELA_APP, player)
+            enemy = Enemy(INIMIGO1, TELA_APP)
 
         # if (keys[ord("q")] or keys[ord(" ")]) and aparecer_ataque == False:
         #     sound_effect_lazer.play()  # Toda vez que clicar para atacar, vai ter um efeito"
