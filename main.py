@@ -7,26 +7,26 @@ from classes.moeda import *
 from classes.vida import *
 from classes.nave import *
 from classes.inimigo2 import *
-# from game import *
+from classes.game_text_menu import *
 
-def dados_game(moeda_capturada, pontuacao, quantidade_vidas, tempo, VIDA, TELA_APP):
+def dados_game(moeda_capturada, pontuacao, quantidade_vidas, tempo, VIDA, TELA_APP, FONTE):
     # Essa função serve para colocar os dados de coleta de moeda
     # Ou colisão com o inimigo, na tela
 
-    message_coin = f'Moedas: {moeda_capturada}/999'
-    formatted_text_coin = fonte.render(message_coin, True, (255, 255, 255))
+    message_coin = f'Moedas: {moeda_capturada}/99'
+    formatted_text_coin = FONTE.render(message_coin, True, (255, 255, 255))
 
     message_enemy = f'Abates: {pontuacao}'
-    formatted_text_enemy = fonte.render(message_enemy, True, (255, 255, 255))
+    formatted_text_enemy = FONTE.render(message_enemy, True, (255, 255, 255))
 
     message_time = f'Tempo: {tempo}s'
-    formatted_text_time = fonte.render(message_time, True, (255, 255, 255))
+    formatted_text_time = FONTE.render(message_time, True, (255, 255, 255))
 
     TAM_VIDA = VIDA.get_rect().size
     for i in range(quantidade_vidas):
         TELA_APP.blit(VIDA, (i*TAM_VIDA[0], 0))
 
-    TELA_APP.blit(formatted_text_coin, (760, 5))
+    TELA_APP.blit(formatted_text_coin, (770, 5))
     TELA_APP.blit(formatted_text_enemy, (370, 5))
     TELA_APP.blit(formatted_text_time, (560, 5))
 
@@ -64,7 +64,8 @@ pygame.display.set_caption('The Galaxy War')
 # pygame.mixer.music.play(-1) # Se passar menos -1 para a função, ela fica em Loop
 
 pygame.font.init()  # Iniciando
-fonte = pygame.font.SysFont('8-BIT WONDER.TTF', 35, True, True) # A fonte que aparece na tela ainda não é essa
+FONTE_FILE = '8-BIT WONDER.TTF'
+FONTE = pygame.font.SysFont(FONTE_FILE, 35, True, True) 
 
 
 FPS = 60
@@ -74,57 +75,47 @@ tela_aplicativo = 'tela_inicial' # Ela é dividida em: ['tela_inicial', 'jogo', 
 app_fps = pygame.time.Clock()  
 
 rodar_app = True  # Indica se o app tá rodando
+jogo_text = Game_Text_and_Menu(rodar_app, tela_aplicativo == 'jogo', TELA_APP, FONTE_FILE)
+
 while rodar_app:
     app_fps.tick(FPS)
-    tempo_tela += 1
+    # tempo_tela += 1
     TELA_APP.fill((0, 0, 0))
     TELA_APP.blit(BACKGROUND, (0,0))
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            rodar_app = False
-
-        if event.type == pygame.KEYDOWN: 
-            if event.key == pygame.K_ESCAPE: 
-                rodar_app = False
-            
-            if tela_aplicativo == 'jogo':
-                if event.key == ord('p'):
-                    tela_aplicativo = 'pausa'
-
-            elif tela_aplicativo == 'pausa':
-                if event.key == ord('p'):
-                    tela_aplicativo = 'jogo'
-
-                elif event.key == ord('r'):
-                    tempo_jogo = 0
-                    tela_aplicativo = 'jogo'
-                    
-        if event.type == pygame.KEYUP:
-            if tela_aplicativo == 'tela_inicial':
-                if event.key == pygame.K_SPACE:
-                    tela_aplicativo = 'jogo'
-
-            elif tela_aplicativo == 'tela_final':
-                if event.key == pygame.K_SPACE:
-                    tempo_jogo = 0
-                    tela_aplicativo = 'jogo'
-
     if tela_aplicativo == 'tela_inicial':
+        jogo_text.curr_menu.display_menu()
 
-        if (tempo_tela//(FPS//2)) % 2 == 0:
-            imagem_tela = TELA_INICIAL_IM2
-        else:
-            imagem_tela = TELA_INICIAL_IM1
+        if jogo_text.running == False:
+            rodar_app = False
+        
+        if jogo_text.playing == True:
+            tela_aplicativo = 'jogo'
 
-        imagem_tela_tamanho = imagem_tela.get_rect().size
+        # if (tempo_tela//(FPS//2)) % 2 == 0:
+        #     imagem_tela = TELA_INICIAL_IM2
+        # else:
+        #     imagem_tela = TELA_INICIAL_IM1
 
-        TELA_APP.blit(imagem_tela, 
-                        (LARGURA//2 - imagem_tela_tamanho[0]//2,
-                        ALTURA//2 - imagem_tela_tamanho[1]//2))
+        # imagem_tela_tamanho = imagem_tela.get_rect().size
+
+        # TELA_APP.blit(imagem_tela, 
+        #                 (LARGURA//2 - imagem_tela_tamanho[0]//2,
+        #                 ALTURA//2 - imagem_tela_tamanho[1]//2))
 
             
     elif tela_aplicativo == 'jogo':
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                rodar_app = False
+
+            if event.type == pygame.KEYDOWN: 
+                if event.key == pygame.K_ESCAPE: 
+                    rodar_app = False
+
+                if event.key == ord('p'):
+                    tela_aplicativo = 'pausa'
 
         if tempo_jogo == 0:
             player = Nave(USUARIO, TELA_APP, ATAQUE)
@@ -138,14 +129,16 @@ while rodar_app:
         # Enquanto estiver no jogo, o tempo de jogo será contado (o tempo atual é (tempo_jogo - 1)/60 segundos)
         tempo_jogo += 1
 
-        if (tempo_jogo % int(tempo_respawn*FPS) == 0):
+        # Os controles dos tempos de Respawn dos inimigos
+        if tempo_jogo % (int(round(tempo_respawn*FPS, 0))) == 0:
             lista_inimigos.append(Enemy(INIMIGO1, TELA_APP))
 
-        if tempo_jogo//FPS >= 0 and (tempo_jogo % (10*FPS) == 0):
+        if tempo_jogo//FPS >= 60 and (tempo_jogo % (10*FPS) == 0):
             lista_inimigos.append(Inimigo2(INIMIGO2, TELA_APP))
 
-        if tempo_jogo % (15*FPS) == 0 and tempo_respawn > 0.4:
-            tempo_respawn -= 0.2
+        if (tempo_jogo % (10*FPS) == 0) and tempo_respawn > 0.2:
+            tempo_respawn = round(tempo_respawn - 0.1, 1)
+            print(round(5.36, 0))
 
         #surgir a vida
         vida.surgir(tempo_jogo, FPS, player)
@@ -153,17 +146,26 @@ while rodar_app:
 
 
         #surgir moeda
-        if player.moedas < 999:
+        if player.moedas < 99:
             moeda.aparecer(tempo_jogo, FPS, player)
+        elif player.moedas >= 99:
+            tela_aplicativo = 'tela_final'
 
+        if player.vida <= 0:
+            tela_aplicativo = 'tela_final'
+            jogo_text.playing = False
+
+        # Checar colisão com a moeda
         if moeda.tem_moeda == True and colisao(player.x, player.y, player.tamanho, moeda.x, moeda.y, moeda.tamanho):
             player.moedas += 1
             moeda.tem_moeda = False  
         
+        # Checar colisão com a vida
         if vida.aparecer == True and player.vida < 10 and colisao(player.x, player.y, player.tamanho, vida.x, vida.y, vida.tamanho):
             player.vida += 1
             vida.aparecer = False
 
+        # Checar colisão do inimigo com o player ou com o laser
         for i in range(len(lista_inimigos)):
             if colisao(player.x, player.y, player.tamanho, lista_inimigos[i].rect[0], lista_inimigos[i].rect[1], lista_inimigos[i].tamanho):
                 player.vida -= 1
@@ -174,22 +176,76 @@ while rodar_app:
                 player.tiro = False
                 lista_inimigos[i].aparecer = False 
 
+        # Fazer o movimento do player
         keys = pygame.key.get_pressed()
         player.controle(keys)
 
-        # enemy.update()
+        # Fazer o movimento do inimigo
         for i in range(len(lista_inimigos)):
             lista_inimigos[i].update()
 
+        # Remover o inimigo da lista de inimigos caso ele tenha sido destruído
         for inimigo in lista_inimigos:
             if inimigo.aparecer == False:
                 lista_inimigos.remove(inimigo)
 
-        if player.vida <= 0:
-            tela_aplicativo = 'tela_final' 
-
         # Mostra os dados de Coleta Moeda e Abates na tela
-        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA, TELA_APP)
+        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA, TELA_APP, FONTE)
+
+        # Desenhar a vida, a moeda os inimigos e o player
+        vida.desenhar()
+        moeda.desenhar()
+        for inimigo in lista_inimigos:
+            inimigo.desenhar()
+
+        player.desenhar()
+
+    elif tela_aplicativo == 'pausa':
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                rodar_app = False
+
+            if event.type == pygame.KEYDOWN: 
+                if event.key == pygame.K_ESCAPE: 
+                    rodar_app = False
+
+                if event.key == ord('p'):
+                    tela_aplicativo = 'jogo'
+
+                elif event.key == ord('r'):
+                    tempo_jogo = 0
+                    tela_aplicativo = 'jogo'
+
+        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA, TELA_APP, FONTE)
+
+        vida.desenhar()
+        moeda.desenhar()
+        for inimigo in lista_inimigos:
+            inimigo.desenhar()
+        player.desenhar()
+
+        jogo_text.draw_text('PAUSA', 40,
+                           LARGURA//2, ALTURA//2)
+
+
+    elif tela_aplicativo == 'tela_final':
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                rodar_app = False
+
+            if event.type == pygame.KEYDOWN: 
+                if event.key == pygame.K_ESCAPE: 
+                    rodar_app = False
+                        
+            if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_SPACE:
+                        tempo_jogo = 0
+                        jogo_text.playing = False
+                        tela_aplicativo = 'tela_inicial'
+
+        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA, TELA_APP, FONTE)
 
         vida.desenhar()
         moeda.desenhar()
@@ -199,40 +255,42 @@ while rodar_app:
         player.desenhar()
 
         
-    elif tela_aplicativo == 'pausa':
-        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA, TELA_APP)
-
-        vida.desenhar()
-        moeda.desenhar()
-        for inimigo in lista_inimigos:
-            inimigo.desenhar()
-
-        player.desenhar()
-
-
-    elif tela_aplicativo == 'tela_final':
-
         tempo_tela += 1
 
-        if (tempo_tela//(FPS//2)) % 2 == 0:
-            imagem_tela = TELA_FINAL_IM2
+        if player.moedas < 99:
+            jogo_text.draw_text('Obrigado por jogar', 40,
+                            LARGURA//2, ALTURA//2)
+
+            if (tempo_tela//(FPS//1.5)) % 2 == 0:
+                jogo_text.draw_text('Aperte espaco para voltar ao Menu Inicial', 20,
+                                LARGURA//2, ALTURA//2 + 50)
         else:
-            imagem_tela = TELA_FINAL_IM1
+            jogo_text.draw_text('Parabens voce venceu', 40,
+                            LARGURA//2, ALTURA//2 - 45)
+            jogo_text.draw_text('Quanta habilidade', 20,
+                            LARGURA//2, ALTURA//2 + 0)
+            jogo_text.draw_text('Quanta superacao', 20,
+                            LARGURA//2, ALTURA//2 + 25)
+            jogo_text.draw_text('Voce esta de parabens', 20,
+                            LARGURA//2, ALTURA//2 + 50)
 
-        imagem_tela_tamanho = imagem_tela.get_rect().size
+            if (tempo_tela//(FPS//1.5)) % 2 == 0:
+                jogo_text.draw_text('Aperte espaco para voltar ao Menu Inicial', 20,
+                                LARGURA//2, ALTURA//2 + 90)
 
-        TELA_APP.blit(imagem_tela, 
-                        (LARGURA//2 - imagem_tela_tamanho[0]//2,
-                        ALTURA//2 - imagem_tela_tamanho[1]//2))
+        
+        # tempo_tela += 1
 
-        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA, TELA_APP)
+        # if (tempo_tela//(FPS//2)) % 2 == 0:
+        #     imagem_tela = TELA_FINAL_IM2
+        # else:
+        #     imagem_tela = TELA_FINAL_IM1
 
-        vida.desenhar()
-        moeda.desenhar()
-        for inimigo in lista_inimigos:
-            inimigo.desenhar()
+        # imagem_tela_tamanho = imagem_tela.get_rect().size
 
-        player.desenhar()
+        # TELA_APP.blit(imagem_tela, 
+        #                 (LARGURA//2 - imagem_tela_tamanho[0]//2,
+        #                 ALTURA//2 - imagem_tela_tamanho[1]//2))
     
     # Aqui atualiza a tela inserindo todos os desenhos realizados pelo blit a cada rodar_app do while
     pygame.display.flip()
