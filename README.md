@@ -32,6 +32,6 @@
 - O item coração deve ser capturado para ganhar mais vidas. 
 - Colete moedas para ganhar o jogo. 
 - Para fechar o jogo aperte a tecla esc ou aperte no x.
-- O jogo termina quando todas as vidas se esgotarem ou quando forem capturadas 999 moedas. 
+- O jogo termina quando todas as vidas se esgotarem ou quando forem capturadas 99 moedas. 
 
 ## Imagens do projeto:
