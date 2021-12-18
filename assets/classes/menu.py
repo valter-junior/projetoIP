@@ -130,11 +130,13 @@ class CreditsMenu(Menu): # Criando os créditos
         self.name2x, self.name2y = self.mid_w, self.mid_h + 80
         self.name3x, self.name3y = self.mid_w, self.mid_h + 110
         self.name4x, self.name4y = self.mid_w, self.mid_h + 140
+        self.name5x, self.name5y = self.mid_w, self.mid_h + 170
 
         self.game.draw_text('Desenvolvido por', 40, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
         self.game.draw_text('Everlon Figueiroa', 20, self.namex, self.namey)
-        self.game.draw_text('Gabriela Pinheiro', 20, self.name1x, self.name1y)
-        self.game.draw_text('Guilherme Caio', 20, self.name2x, self.name2y)
-        self.game.draw_text('Gabriel Pacheco', 20, self.name3x, self.name3y)
+        self.game.draw_text('Gabriel Pacheco', 20, self.name1x, self.name1y)
+        self.game.draw_text('Gabriela Pinheiro', 20, self.name2x, self.name2y)
+        self.game.draw_text('Guilherme Caio', 20, self.name3x, self.name3y)
         self.game.draw_text('Joao Pedro', 20, self.name4x, self.name4y)
+        self.game.draw_text('Valter Junior', 20, self.name5x, self.name5y)
         self.game.restart_keys() 

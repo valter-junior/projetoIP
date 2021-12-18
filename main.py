@@ -1,13 +1,12 @@
 import pygame  # a biblioteca do pygame
-# import random  # para pegar valores aleatórios
 
 # Os imports de pastas agora:
-from classes.enemyClass import *
-from classes.moeda import *
-from classes.vida import *
-from classes.nave import *
-from classes.inimigo2 import *
-from classes.game_text_menu import *
+from assets.classes.enemyClass import *
+from assets.classes.moeda import *
+from assets.classes.vida import *
+from assets.classes.nave import *
+from assets.classes.inimigo2 import *
+from assets.classes.game_text_menu import *
 
 def dados_game(moeda_capturada, pontuacao, quantidade_vidas, tempo, VIDA, TELA_APP, FONTE):
     # Essa função serve para colocar os dados de coleta de moeda
@@ -41,30 +40,26 @@ LARGURA, ALTURA = 1000, 600  # Largura e altura da tela do aplicativo
 
 TELA_APP = pygame.display.set_mode((LARGURA, ALTURA)) 
 # Imagens
-USUARIO = pygame.image.load("Imagens/ship_2.png")
-INIMIGO1 = pygame.image.load("Imagens/pixel_ship_yellow2.png")
-INIMIGO2 = pygame.image.load("Imagens/pixel_ship_yellow2.png") # Carrega a imagem do inimigo 1
-MOEDA = pygame.image.load("Imagens/coin_2.png")
-ATAQUE = pygame.image.load("Imagens/lazer2.png")
-VIDA = pygame.image.load("Imagens/Health2.png")
-BACKGROUND = pygame.image.load("Imagens/galaxy_background.png") # Imagem do backgrond
-TELA_INICIAL_IM1 = pygame.image.load("Imagens/1.png")
-TELA_INICIAL_IM2 = pygame.image.load("Imagens/2.png")  
-TELA_FINAL_IM1 = pygame.image.load("Imagens/3.png")  
-TELA_FINAL_IM2 = pygame.image.load("Imagens/4.png")  
+USUARIO = pygame.image.load("assets/imagens/ship_2.png")
+INIMIGO1 = pygame.image.load("assets/imagens/pixel_ship_yellow2.png")
+INIMIGO2 = pygame.image.load("assets/imagens/pixel_ship_yellow2.png") # Carrega a imagem do inimigo 1
+MOEDA = pygame.image.load("assets/imagens/coin_2.png")
+ATAQUE = pygame.image.load("assets/imagens/lazer2.png")
+VIDA = pygame.image.load("assets/imagens/Health2.png")
+BACKGROUND = pygame.image.load("assets/imagens/galaxy_background.png") # Imagem do backgrond
 
 pygame.init()
 pygame.display.set_caption('The Galaxy War')
 
 # pygame.mixer.init()
-# musica_fundo = pygame.mixer.music.load('Sons\BoxCat Games - Mission.mp3')  # Buscando a música de fundo
-# sound_effect_collect = pygame.mixer.Sound('Sons\smw_message_block.wav') # Coleta moeda
-# sound_effect_lazer = pygame.mixer.Sound('Sons\Shofixti-Shot.wav') # atira com laser
-# sound_effect_health = pygame.mixer.Sound('Sons\smw_kick.wav') #  pega vida
+# musica_fundo = pygame.mixer.music.load('assets/sons/BoxCat Games - Mission.mp3')  # Buscando a música de fundo
+# sound_effect_collect = pygame.mixer.Sound('assets/sons/smw_message_block.wav') # Coleta moeda
+# sound_effect_lazer = pygame.mixer.Sound('assets/sons/Shofixti-Shot.wav') # atira com laser
+# sound_effect_health = pygame.mixer.Sound('assets/sons/smw_kick.wav') #  pega vida
 # pygame.mixer.music.play(-1) # Se passar menos -1 para a função, ela fica em Loop
 
 pygame.font.init()  # Iniciando
-FONTE_FILE = '8-BIT WONDER.TTF'
+FONTE_FILE = 'assets/8-BIT_WONDER.TTF'
 FONTE = pygame.font.SysFont(FONTE_FILE, 35, True, True) 
 
 
@@ -91,18 +86,6 @@ while rodar_app:
         
         if jogo_text.playing == True:
             tela_aplicativo = 'jogo'
-
-        # if (tempo_tela//(FPS//2)) % 2 == 0:
-        #     imagem_tela = TELA_INICIAL_IM2
-        # else:
-        #     imagem_tela = TELA_INICIAL_IM1
-
-        # imagem_tela_tamanho = imagem_tela.get_rect().size
-
-        # TELA_APP.blit(imagem_tela, 
-        #                 (LARGURA//2 - imagem_tela_tamanho[0]//2,
-        #                 ALTURA//2 - imagem_tela_tamanho[1]//2))
-
             
     elif tela_aplicativo == 'jogo':
         
@@ -124,7 +107,6 @@ while rodar_app:
             lista_inimigos = []
             tempo_respawn = 3
             lista_inimigos.append(Enemy(INIMIGO1, TELA_APP))
-
         
         # Enquanto estiver no jogo, o tempo de jogo será contado (o tempo atual é (tempo_jogo - 1)/60 segundos)
         tempo_jogo += 1
@@ -138,7 +120,6 @@ while rodar_app:
 
         if (tempo_jogo % (10*FPS) == 0) and tempo_respawn > 0.2:
             tempo_respawn = round(tempo_respawn - 0.1, 1)
-            print(round(5.36, 0))
 
         #surgir a vida
         vida.surgir(tempo_jogo, FPS, player)
@@ -277,20 +258,6 @@ while rodar_app:
             if (tempo_tela//(FPS//1.5)) % 2 == 0:
                 jogo_text.draw_text('Aperte espaco para voltar ao Menu Inicial', 20,
                                 LARGURA//2, ALTURA//2 + 90)
-
-        
-        # tempo_tela += 1
-
-        # if (tempo_tela//(FPS//2)) % 2 == 0:
-        #     imagem_tela = TELA_FINAL_IM2
-        # else:
-        #     imagem_tela = TELA_FINAL_IM1
-
-        # imagem_tela_tamanho = imagem_tela.get_rect().size
-
-        # TELA_APP.blit(imagem_tela, 
-        #                 (LARGURA//2 - imagem_tela_tamanho[0]//2,
-        #                 ALTURA//2 - imagem_tela_tamanho[1]//2))
     
     # Aqui atualiza a tela inserindo todos os desenhos realizados pelo blit a cada rodar_app do while
     pygame.display.flip()

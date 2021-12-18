@@ -1,7 +1,6 @@
 # Importações
 import pygame
-from classes.menu import *
-
+from assets.classes.menu import *
 
 class Game_Text_and_Menu():
     def __init__(self, running, playing, TELA, FONTE_FILE):
