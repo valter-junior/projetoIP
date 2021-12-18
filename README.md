@@ -25,6 +25,8 @@
 
 ## Instruções do jogo:
 - Aperte Enter para iniciar o jogo. 
+- Aperte F para sair do jogo a qualquer momento.
+- Aperte P para pausar o jogo.
 - As setas do teclado movimentam a Nave (jogador). 
 - A barra de espaço atira lasers, para matar o inimigo.
 - O item coração deve ser capturado para ganhar mais vidas. 
