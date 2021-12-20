@@ -27,6 +27,7 @@
 
 Entradas do teclado para utilizar o MENU:
 - Enter e setas do teclado.
+
 Entradas do teclado para utilizar durante o jogo:
 - Barra de espaço, setas do teclado e P. 
 
