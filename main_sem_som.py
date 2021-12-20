@@ -52,7 +52,7 @@ BACKGROUND = pygame.image.load("assets/imagens/galaxy_background.png") # Imagem 
 pygame.init()
 pygame.display.set_caption('The Galaxy War')
 
-pygame.mixer.init()
+# pygame.mixer.init()
 # musica_fundo = pygame.mixer.music.load('assets/sons/BoxCat Games - Mission.mp3')  # Buscando a música de fundo
 # sound_effect_collect = pygame.mixer.Sound('assets/sons/smw_message_block.wav') # Coleta moeda
 # sound_effect_lazer = pygame.mixer.Sound('assets/sons/Shofixti-Shot.wav') # atira com laser

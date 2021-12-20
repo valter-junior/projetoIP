@@ -43,7 +43,7 @@ class Game_Text_and_Menu():
                 self.curr_menu.run_display = False
 
             if event.type == pygame.KEYDOWN:  # Verificando se aquelas teclas foram pressionadas
-                if event.key == pygame.K_RETURN and event.key == pygame.K_KP_ENTER:
+                if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                     self.START_KEY = True
                 if event.key == pygame.K_ESCAPE:
                     self.BACK_KEY = True
