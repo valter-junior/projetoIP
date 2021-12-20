@@ -115,6 +115,7 @@ class MenuPause(Menu):
         if self.game.START_KEY:
             if self.state == "Continue":
                 self.game.paused = False
+                self.game.curr_menu = self.game.main_menu
             elif self.state == 'Main menu':
                 self.cursor_rect.midtop = (self.contx + self.offset, self.conty)
                 self.state = 'Continue'
