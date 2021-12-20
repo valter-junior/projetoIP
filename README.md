@@ -26,9 +26,30 @@
 ## Instruções para o jogo:
 
 Entradas do teclado para utilizar o MENU:
-- Barra de espaço e setas do teclado.
+- Enter e setas do teclado.
 Entradas do teclado para utilizar durante o jogo:
 - Barra de espaço, setas do teclado e P. 
 
 
 ## Imagens do projeto:
+Menu:
+
+![menu](https://user-images.githubusercontent.com/91145009/146822749-9cb60794-3a31-4b36-a3da-ff6250d9fc65.jpeg)
+
+Moedas e diferentes inimigos: 
+
+![img3](https://user-images.githubusercontent.com/91145009/146822858-c8d025c8-c387-420e-84e4-8eabd0ba44c4.jpeg)
+
+Pausa: 
+
+![pausa](https://user-images.githubusercontent.com/91145009/146822962-2fe09d60-c805-40c9-9120-32282e0043a5.jpeg)
+
+Game over:
+
+![fim](https://user-images.githubusercontent.com/91145009/146823007-cbfdd3bb-976d-4825-9385-f39eea6f3247.jpeg)
+
+Game over e vitória: 
+
+![parabens](https://user-images.githubusercontent.com/91145009/146823085-8eedb5c2-79f9-4ff5-9b5c-3cbb7c2cb178.jpeg)
+
+
