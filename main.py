@@ -40,23 +40,24 @@ LARGURA, ALTURA = 1000, 600  # Largura e altura da tela do aplicativo
 
 TELA_APP = pygame.display.set_mode((LARGURA, ALTURA)) 
 # Imagens
-USUARIO = pygame.image.load("assets/imagens/ship_2.png")
-INIMIGO1 = pygame.image.load("assets/imagens/pixel_ship_yellow2.png")
-INIMIGO2 = pygame.image.load("assets/imagens/pixel_ship_yellow2.png") # Carrega a imagem do inimigo 1
-MOEDA = pygame.image.load("assets/imagens/coin_2.png")
-ATAQUE = pygame.image.load("assets/imagens/lazer2.png")
-VIDA = pygame.image.load("assets/imagens/Health2.png")
+USUARIO = pygame.image.load("assets/imagens/ship.png")
+INIMIGO1 = pygame.image.load("assets/imagens/ship_enemy_1.png")
+INIMIGO2 = pygame.image.load("assets/imagens/ship_enemy_2.png") # Carrega a imagem do inimigo 1
+MOEDA = pygame.image.load("assets/imagens/coin.png")
+ATAQUE = pygame.image.load("assets/imagens/lazer.png")
+VIDA = pygame.image.load("assets/imagens/health.png")
+VIDA2 = pygame.image.load("assets/imagens/health2.png")
 BACKGROUND = pygame.image.load("assets/imagens/galaxy_background.png") # Imagem do backgrond
 
 pygame.init()
 pygame.display.set_caption('The Galaxy War')
 
-# pygame.mixer.init()
-# musica_fundo = pygame.mixer.music.load('assets/sons/BoxCat Games - Mission.mp3')  # Buscando a música de fundo
-# sound_effect_collect = pygame.mixer.Sound('assets/sons/smw_message_block.wav') # Coleta moeda
-# sound_effect_lazer = pygame.mixer.Sound('assets/sons/Shofixti-Shot.wav') # atira com laser
-# sound_effect_health = pygame.mixer.Sound('assets/sons/smw_kick.wav') #  pega vida
-# pygame.mixer.music.play(-1) # Se passar menos -1 para a função, ela fica em Loop
+pygame.mixer.init()
+musica_fundo = pygame.mixer.music.load('assets/sons/BoxCat Games - Mission.mp3')  # Buscando a música de fundo
+sound_effect_collect = pygame.mixer.Sound('assets/sons/smw_message_block.wav') # Coleta moeda
+sound_effect_lazer = pygame.mixer.Sound('assets/sons/Shofixti-Shot.wav') # atira com laser
+sound_effect_health = pygame.mixer.Sound('assets/sons/smw_kick.wav') #  pega vida
+pygame.mixer.music.play(-1) # Se passar menos -1 para a função, ela fica em Loop
 
 pygame.font.init()  # Iniciando
 FONTE_FILE = 'assets/8-BIT_WONDER.TTF'
@@ -74,7 +75,6 @@ jogo_text = Game_Text_and_Menu(rodar_app, tela_aplicativo == 'jogo', TELA_APP, F
 
 while rodar_app:
     app_fps.tick(FPS)
-    # tempo_tela += 1
     TELA_APP.fill((0, 0, 0))
     TELA_APP.blit(BACKGROUND, (0,0))
 
@@ -86,6 +86,7 @@ while rodar_app:
         
         if jogo_text.playing == True:
             tela_aplicativo = 'jogo'
+            tempo_jogo = 0
             
     elif tela_aplicativo == 'jogo':
         
@@ -94,11 +95,10 @@ while rodar_app:
                 rodar_app = False
 
             if event.type == pygame.KEYDOWN: 
-                if event.key == pygame.K_ESCAPE: 
-                    rodar_app = False
-
                 if event.key == ord('p'):
                     tela_aplicativo = 'pausa'
+                    jogo_text.paused = True
+                    jogo_text.curr_menu = jogo_text.pause
 
         if tempo_jogo == 0:
             player = Nave(USUARIO, TELA_APP, ATAQUE)
@@ -140,11 +140,13 @@ while rodar_app:
         if moeda.tem_moeda == True and colisao(player.x, player.y, player.tamanho, moeda.x, moeda.y, moeda.tamanho):
             player.moedas += 1
             moeda.tem_moeda = False  
+            sound_effect_collect.play()
         
         # Checar colisão com a vida
         if vida.aparecer == True and player.vida < 10 and colisao(player.x, player.y, player.tamanho, vida.x, vida.y, vida.tamanho):
             player.vida += 1
             vida.aparecer = False
+            sound_effect_health.play(   )
 
         # Checar colisão do inimigo com o player ou com o laser
         for i in range(len(lista_inimigos)):
@@ -159,6 +161,12 @@ while rodar_app:
 
         # Fazer o movimento do player
         keys = pygame.key.get_pressed()
+
+        # Efeito sonoro do tiro
+        if keys[pygame.K_SPACE] and not player.tiro: 
+            sound_effect_lazer.play()
+
+        #conrola o movimento do jogador
         player.controle(keys)
 
         # Fazer o movimento do inimigo
@@ -171,7 +179,7 @@ while rodar_app:
                 lista_inimigos.remove(inimigo)
 
         # Mostra os dados de Coleta Moeda e Abates na tela
-        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA, TELA_APP, FONTE)
+        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA2, TELA_APP, FONTE)
 
         # Desenhar a vida, a moeda os inimigos e o player
         vida.desenhar()
@@ -181,52 +189,38 @@ while rodar_app:
 
         player.desenhar()
 
+    # Desenha a tela caso o jogo esteja pausado
     elif tela_aplicativo == 'pausa':
         
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                rodar_app = False
-
-            if event.type == pygame.KEYDOWN: 
-                if event.key == pygame.K_ESCAPE: 
-                    rodar_app = False
-
-                if event.key == ord('p'):
-                    tela_aplicativo = 'jogo'
-
-                elif event.key == ord('r'):
-                    tempo_jogo = 0
-                    tela_aplicativo = 'jogo'
-
-        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA, TELA_APP, FONTE)
-
+        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA2, TELA_APP, FONTE)
         vida.desenhar()
         moeda.desenhar()
         for inimigo in lista_inimigos:
             inimigo.desenhar()
         player.desenhar()
 
-        jogo_text.draw_text('PAUSA', 40,
-                           LARGURA//2, ALTURA//2)
+        jogo_text.curr_menu.display_menu()
+        
+        if jogo_text.paused == False:
+            tela_aplicativo = 'jogo'
 
+        if jogo_text.playing == False:
+            tela_aplicativo = 'tela_inicial'
 
+    # Desenha a tela de final do jogo
     elif tela_aplicativo == 'tela_final':
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 rodar_app = False
-
-            if event.type == pygame.KEYDOWN: 
-                if event.key == pygame.K_ESCAPE: 
-                    rodar_app = False
                         
             if event.type == pygame.KEYUP:
                     if event.key == pygame.K_SPACE:
-                        tempo_jogo = 0
                         jogo_text.playing = False
+                        jogo_text.paused = False
                         tela_aplicativo = 'tela_inicial'
 
-        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA, TELA_APP, FONTE)
+        dados_game(player.moedas, player.inimigos, player.vida, tempo_jogo//FPS,  VIDA2, TELA_APP, FONTE)
 
         vida.desenhar()
         moeda.desenhar()

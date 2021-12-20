@@ -8,6 +8,7 @@ class Game_Text_and_Menu():
 
         self.running = running  # Será verdadeira quando o jogo estiver ligado
         self.playing = playing  # Quando o jogador estiver jogando
+        self.paused = False
 
         # Iteração através do menu
         # A ideia é que quando o jogador soltar uma dessas teclas, elas vão ser definidas como verdadeiras
@@ -27,8 +28,8 @@ class Game_Text_and_Menu():
 
         # Só pra referenciar, não vai ser alterado
         self.main_menu = MainMenu(self)
-        self.options = MenuOptions(self)
         self.credits = CreditsMenu(self)
+        self.pause = MenuPause(self)
         # Permite que essa variável do menu atual, mude dependendo do menu em q ela estiver
         self.curr_menu = self.main_menu
 
@@ -42,11 +43,9 @@ class Game_Text_and_Menu():
                 self.curr_menu.run_display = False
 
             if event.type == pygame.KEYDOWN:  # Verificando se aquelas teclas foram pressionadas
-                if event.key == pygame.K_ESCAPE:
-                    self.running = False
                 if event.key == pygame.K_RETURN:
                     self.START_KEY = True
-                if event.key == pygame.K_BACKSPACE:
+                if event.key == pygame.K_ESCAPE:
                     self.BACK_KEY = True
                 if event.key == pygame.K_DOWN:
                     self.DOWN_KEY = True
