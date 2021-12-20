@@ -1,16 +1,16 @@
 # The galaxy war - Projeto de Introdução à Programação
 
->O grupo desenvolveu um sistema interativo 2D utilizando python e biblioteca Pygame. O jogo "The Galaxy War" tem como objetivo capturar moedas, contudo naves inimigas atrapalham e retiram a sua vida, mas há como recuperá-las capturando os corações que surgem na tela. >
+>O grupo desenvolveu um sistema interativo 2D utilizando python e biblioteca Pygame. O jogo "The Galaxy War" tem como objetivo a nave principal capturar moedas, contudo naves inimigas atrapalham e retiram a sua vida, mas há como recuperá-las capturando os corações que surgem na tela e destruir os inimigos ao longo do jogo.
 >
 
 ## Team
 
-- Everlon Figueirôa dos Santos 
--  João Pedro Alves de Souza Silva - *jpass*
-- Gabriel Pacheco Lima
-- Guilherme Pessoa
+- Everlon Figueirôa dos Santos - *efs10*
+- João Pedro Alves de Souza Silva - *jpass*
+- Gabriel Pacheco Lima - *gpl3*
+- Guilherme Caio Pessoa Ramos - *gcpr*
 - Maria Gabriela Pinheiro Claudino - *mgpc*
-- Valter José da Silva Junior
+- Valter José da Silva Junior - *vjsj*
 
 ## Rodando o projeto
 
@@ -23,15 +23,12 @@
 `cd ./projetoIP/`
 4. Rode a main do projeto. 
 
-## Instruções do jogo:
-- Aperte Enter para iniciar o jogo. 
-- Aperte F para sair do jogo a qualquer momento.
-- Aperte P para pausar o jogo.
-- As setas do teclado movimentam a Nave (jogador). 
-- A barra de espaço atira lasers, para matar o inimigo.
-- O item coração deve ser capturado para ganhar mais vidas. 
-- Colete moedas para ganhar o jogo. 
-- Para fechar o jogo aperte a tecla esc ou aperte no x.
-- O jogo termina quando todas as vidas se esgotarem ou quando forem capturadas 999 moedas. 
+## Instruções para o jogo:
+
+Entradas do teclado para utilizar o MENU:
+- Barra de espaço e setas do teclado.
+Entradas do teclado para utilizar durante o jogo:
+- Barra de espaço, setas do teclado e P. 
+
 
 ## Imagens do projeto:
